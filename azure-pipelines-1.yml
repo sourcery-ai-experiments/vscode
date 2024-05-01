@@ -11,9 +11,22 @@ pool:
 
 steps:
 - task: NodeTool@0
+- task: DotNetCoreCLI@2
+ 
+- task: Bash@3
   inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+    command: 'build'
+    projects: |
+      steps:
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          command: build
+- task: AzureStaticWebApp@0
+  inputs:
+          projects: '**/*.csproj'
+          arguments: '--configuration $(buildConfiguration)' # Update this to match your needs
+ 
 
 - script: |
     npm install
